@@ -38,11 +38,11 @@ export class AuthService {
             },
         });
 
-        if (await User.comparePassword(user, password)) {
+        if (user) {
             return user;
+        } else {
+            return undefined;
         }
-
-        return undefined;
     }
 
 }

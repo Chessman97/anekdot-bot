@@ -8,24 +8,17 @@ export class CreateUserTable1511105183653 implements MigrationInterface {
             columns: [
                 {
                     name: 'id',
-                    type: 'varchar',
-                    length: '255',
+                    type: 'integer',
                     isPrimary: true,
                     isNullable: false,
                 }, {
-                    name: 'first_name',
+                    name: 'firstName',
                     type: 'varchar',
                     length: '255',
                     isPrimary: false,
                     isNullable: false,
                 }, {
-                    name: 'last_name',
-                    type: 'varchar',
-                    length: '255',
-                    isPrimary: false,
-                    isNullable: false,
-                }, {
-                    name: 'email',
+                    name: 'lastName',
                     type: 'varchar',
                     length: '255',
                     isPrimary: false,
@@ -37,11 +30,11 @@ export class CreateUserTable1511105183653 implements MigrationInterface {
                     isPrimary: false,
                     isNullable: false,
                 } , {
-                    name: 'password',
-                    type: 'varchar',
-                    length: '255',
+                    name: 'chatId',
+                    type: 'integer',
                     isPrimary: false,
                     isNullable: false,
+                    isUnique: true,
                 },
             ],
         });
