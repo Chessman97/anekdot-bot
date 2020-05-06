@@ -17,11 +17,7 @@
   "keywords": [
     "NodeJS",
     "TypeScript",
-    "express",
-    "boilerplate",
-    "skeleton",
-    "starter-kit",
-    "w3tec.ch"
+    "express"
   ],
   "homepage": "https://github.com/w3tec/express-typescript-boilerplate#readme",
   "author": "w3tec.ch <info@w3tec.ch>",

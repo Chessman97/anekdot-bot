@@ -30,22 +30,60 @@ export class UserResponse extends BaseUser {
 
 @Authorized()
 @JsonController('/users')
-@OpenAPI({ security: [{ basicAuth: [] }] })
+// @OpenAPI({
+//     security: [{ basicAuth: [] }],
+//     tags: ['User'],
+//     parameters: [
+//         {
+//             in: 'query', name: 'pageNumber',
+//             type: 'integer',
+//             description: 'Example url: /api/currentuser/invoices/in/eth?pageNumber=1&pageSize=5',
+//         },
+//         {
+//             in: 'query', name: 'pageSize',
+//             type: 'integer',
+//         },
+//         {
+//             name: 'Access', in: 'header', description: 'Access token',
+//             required: true, type: 'string', format: 'uuid',
+//         },
+//     ],
+//     responses: {
+//         200: {
+//             description: 'OK',
+//         },
+//         401: {
+//             description: 'Authorization Error',
+//         },
+//     },
+// })
 export class UserController {
 
     constructor(
         private userService: UserService
     ) { }
 
+    @OpenAPI({
+        security: [{ basicAuth: [] }],
+        tags: ['User'],
+        responses: {
+            200: {
+                description: 'OK',
+            },
+            403: {
+                description: 'Hui',
+            },
+        },
+    })
     @Get()
     @ResponseSchema(UserResponse, { isArray: true })
     public find(): Promise<User[]> {
         return this.userService.find();
     }
 
-    @Get('/me')
+    @Get('/me/:loh')
     @ResponseSchema(UserResponse, { isArray: true })
-    public findMe(@Req() req: any): Promise<User[]> {
+    public findMe(@Req() req: any, @Param('loh') loh: number): Promise<User[]> {
         return req.user;
     }
 
