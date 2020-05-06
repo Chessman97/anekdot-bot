@@ -55,21 +55,17 @@ export const env = {
         synchronize: toBool(getOsEnvOptional('TYPEORM_SYNCHRONIZE')),
         logging: getOsEnv('TYPEORM_LOGGING'),
     },
-    graphql: {
-        enabled: toBool(getOsEnv('GRAPHQL_ENABLED')),
-        route: getOsEnv('GRAPHQL_ROUTE'),
-        editor: toBool(getOsEnv('GRAPHQL_EDITOR')),
-    },
     swagger: {
         enabled: toBool(getOsEnv('SWAGGER_ENABLED')),
         route: getOsEnv('SWAGGER_ROUTE'),
         username: getOsEnv('SWAGGER_USERNAME'),
         password: getOsEnv('SWAGGER_PASSWORD'),
     },
-    monitor: {
-        enabled: toBool(getOsEnv('MONITOR_ENABLED')),
-        route: getOsEnv('MONITOR_ROUTE'),
-        username: getOsEnv('MONITOR_USERNAME'),
-        password: getOsEnv('MONITOR_PASSWORD'),
+    redis: {
+        host: getOsEnv('REDIS_HOST'),
+        port: toNumber(getOsEnv('REDIS_PORT')),
+    },
+    telegram: {
+        botToken: getOsEnv('TELEGRAM_BOT_TOKEN'),
     },
 };

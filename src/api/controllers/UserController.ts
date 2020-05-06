@@ -52,7 +52,7 @@ export class UserController {
     @Get('/:id')
     @OnUndefined(UserNotFoundError)
     @ResponseSchema(UserResponse)
-    public one(@Param('id') id: string): Promise<User | undefined> {
+    public one(@Param('id') id: number): Promise<User | undefined> {
         return this.userService.findOne(id);
     }
 

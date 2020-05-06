@@ -8,9 +8,10 @@ import { eventDispatchLoader } from './loaders/eventDispatchLoader';
 import { expressLoader } from './loaders/expressLoader';
 import { homeLoader } from './loaders/homeLoader';
 import { iocLoader } from './loaders/iocLoader';
-import { monitorLoader } from './loaders/monitorLoader';
 import { publicLoader } from './loaders/publicLoader';
+import { redisLoader } from './loaders/redisLoader';
 import { swaggerLoader } from './loaders/swaggerLoader';
+import { telegramBotLoader } from './loaders/telegramBotLoader';
 import { typeormLoader } from './loaders/typeormLoader';
 import { winstonLoader } from './loaders/winstonLoader';
 
@@ -36,9 +37,10 @@ bootstrapMicroframework({
         typeormLoader,
         expressLoader,
         swaggerLoader,
-        monitorLoader,
         homeLoader,
         publicLoader,
+        redisLoader,
+        telegramBotLoader,
     ],
 })
     .then(() => banner(log))
