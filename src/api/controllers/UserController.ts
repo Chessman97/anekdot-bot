@@ -1,4 +1,3 @@
-import { IsEmail, IsNotEmpty, IsUUID } from 'class-validator';
 import {
     Authorized, Delete, Get, JsonController, OnUndefined, Param, Req
 } from 'routing-controllers';
@@ -7,76 +6,32 @@ import { OpenAPI, ResponseSchema } from 'routing-controllers-openapi';
 import { UserNotFoundError } from '../errors/UserNotFoundError';
 import { User } from '../models/User';
 import { UserService } from '../services/UserService';
-
-class BaseUser {
-    @IsNotEmpty()
-    public firstName: string;
-
-    @IsNotEmpty()
-    public lastName: string;
-
-    @IsEmail()
-    @IsNotEmpty()
-    public email: string;
-
-    @IsNotEmpty()
-    public username: string;
-}
-
-export class UserResponse extends BaseUser {
-    @IsUUID()
-    public id: string;
-}
+import { ErrorResponse } from './responses/ErrorResponse';
+import { UserResponse } from './responses/UserResponse';
 
 @Authorized()
-@JsonController('/users')
-// @OpenAPI({
-//     security: [{ basicAuth: [] }],
-//     tags: ['User'],
-//     parameters: [
-//         {
-//             in: 'query', name: 'pageNumber',
-//             type: 'integer',
-//             description: 'Example url: /api/currentuser/invoices/in/eth?pageNumber=1&pageSize=5',
-//         },
-//         {
-//             in: 'query', name: 'pageSize',
-//             type: 'integer',
-//         },
-//         {
-//             name: 'Access', in: 'header', description: 'Access token',
-//             required: true, type: 'string', format: 'uuid',
-//         },
-//     ],
-//     responses: {
-//         200: {
-//             description: 'OK',
-//         },
-//         401: {
-//             description: 'Authorization Error',
-//         },
-//     },
-// })
+@JsonController('/user')
+@OpenAPI({
+    security: [{ ApiKeyAuth: [] }],
+    tags: ['User'],
+    parameters: [{
+        in: 'query',
+        name: 'pageSize',
+        type: 'integer',
+    }],
+})
 export class UserController {
 
     constructor(
         private userService: UserService
     ) { }
 
-    @OpenAPI({
-        security: [{ basicAuth: [] }],
-        tags: ['User'],
-        responses: {
-            200: {
-                description: 'OK',
-            },
-            403: {
-                description: 'Hui',
-            },
-        },
-    })
     @Get()
-    @ResponseSchema(UserResponse, { isArray: true })
+    @OpenAPI({ summary: 'Get all users', description: 'All users', parameters: [{
+        in: 'query', name: 'pageSize', type: 'integer',
+    }]})
+    @ResponseSchema(UserResponse, { description: 'Users', isArray: true })
+    @ResponseSchema(ErrorResponse, { description: 'Access denied', statusCode: '401' })
     public find(): Promise<User[]> {
         return this.userService.find();
     }

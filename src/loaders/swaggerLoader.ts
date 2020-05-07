@@ -31,9 +31,10 @@ export const swaggerLoader: MicroframeworkLoader = (settings: MicroframeworkSett
                 components: {
                     schemas,
                     securitySchemes: {
-                        basicAuth: {
-                            type: 'http',
-                            scheme: 'basic',
+                        ApiKeyAuth: {
+                            type: 'apiKey',
+                            in: 'header',
+                            name: 'Access',
                         },
                     },
                 },
