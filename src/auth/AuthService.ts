@@ -1,48 +1,25 @@
 import * as express from 'express';
 import { Service } from 'typedi';
-import { OrmRepository } from 'typeorm-typedi-extensions';
 
-import { User } from '../api/models/User';
-import { UserRepository } from '../api/repositories/UserRepository';
 import { Logger, LoggerInterface } from '../decorators/Logger';
+import { env } from '../env';
 
 @Service()
 export class AuthService {
 
     constructor(
-        @Logger(__filename) private log: LoggerInterface,
-        @OrmRepository() private userRepository: UserRepository
+        @Logger(__filename) private log: LoggerInterface
     ) { }
 
-    public parseBasicAuthFromRequest(req: express.Request): { username: string, password: string } {
-        const authorization = req.header('authorization');
-
-        if (authorization && authorization.split(' ')[0] === 'Basic') {
-            this.log.info('Credentials provided by the client');
-            const decodedBase64 = Buffer.from(authorization.split(' ')[1], 'base64').toString('ascii');
-            const username = decodedBase64.split(':')[0];
-            const password = decodedBase64.split(':')[1];
-            if (username && password) {
-                return { username, password };
+    public async parseApiKeyAuthFromRequest(req: express.Request): Promise<boolean> {
+        const apiKey = req.header('secret');
+        if (apiKey) {
+            this.log.info('Api key auth', { token: apiKey });
+            if (apiKey === env.app.apiKey) {
+                return true;
             }
         }
-
-        this.log.info('No credentials provided by the client');
-        return undefined;
-    }
-
-    public async validateUser(username: string, password: string): Promise<User> {
-        const user = await this.userRepository.findOne({
-            where: {
-                username,
-            },
-        });
-
-        if (user) {
-            return user;
-        } else {
-            return undefined;
-        }
+        return false;
     }
 
 }

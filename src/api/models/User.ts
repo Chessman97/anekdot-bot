@@ -1,5 +1,6 @@
-import { IsNotEmpty } from 'class-validator';
-import { BeforeInsert, Column, Entity, PrimaryGeneratedColumn } from 'typeorm';
+import { BeforeInsert, Column, Entity, OneToMany, PrimaryGeneratedColumn } from 'typeorm';
+
+import { Anecdote } from './Anecdote';
 
 @Entity()
 export class User {
@@ -10,7 +11,6 @@ export class User {
     @Column()
     public firstName: string;
 
-    @IsNotEmpty()
     @Column()
     public lastName: string;
 
@@ -23,10 +23,12 @@ export class User {
     @Column()
     public activity: Date;
 
+    @OneToMany(type => Anecdote, anecdote => anecdote.user)
+    public anecdotes: Anecdote[];
+
     @BeforeInsert()
     // @ts-ignore
     private setActivityDate(): void {
         this.activity = new Date();
     }
-
 }

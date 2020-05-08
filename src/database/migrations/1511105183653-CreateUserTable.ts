@@ -16,25 +16,30 @@ export class CreateUserTable1511105183653 implements MigrationInterface {
                     type: 'varchar',
                     length: '255',
                     isPrimary: false,
-                    isNullable: false,
+                    isNullable: true,
                 }, {
                     name: 'lastName',
                     type: 'varchar',
                     length: '255',
                     isPrimary: false,
-                    isNullable: false,
+                    isNullable: true,
                 }, {
                     name: 'username',
                     type: 'varchar',
                     length: '255',
                     isPrimary: false,
-                    isNullable: false,
-                } , {
+                    isNullable: true,
+                }, {
                     name: 'chatId',
                     type: 'integer',
                     isPrimary: false,
                     isNullable: false,
                     isUnique: true,
+                }, {
+                    name: 'activity',
+                    type: 'timestamp with time zone',
+                    isPrimary: false,
+                    isNullable: true,
                 },
             ],
         });

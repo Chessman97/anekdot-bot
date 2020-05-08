@@ -6,7 +6,7 @@ export const startScene = new Scene('start');
 startScene.enter(async (ctx: any) => {
     ctx.reply('Выберите действие', Markup
         .keyboard([
-            ['Список подписок', 'Добавить подписку'],
+            ['Информация', 'Добавить анекдот'],
         ])
         .oneTime()
         .resize()
@@ -14,10 +14,10 @@ startScene.enter(async (ctx: any) => {
     );
 });
 
-startScene.hears('Список подписок', async (ctx: any) => {
-    ctx.scene.enter('list_channel');
+startScene.hears('Информация', async (ctx: any) => {
+    ctx.scene.enter('info');
 });
 
-startScene.hears('Добавить подписку', async (ctx: any) => {
-    ctx.scene.enter('add_channel');
+startScene.hears('Добавить анекдот', async (ctx: any) => {
+    ctx.scene.enter('add_anecdote');
 });

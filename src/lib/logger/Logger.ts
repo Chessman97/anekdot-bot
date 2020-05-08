@@ -1,3 +1,4 @@
+import { Namespace } from 'cls-hooked';
 import * as path from 'path';
 import * as winston from 'winston';
 
@@ -29,31 +30,51 @@ export class Logger {
     }
 
     private scope: string;
+    private isDebugMode: boolean;
 
     constructor(scope?: string) {
         this.scope = Logger.parsePathToScope((scope) ? scope : Logger.DEFAULT_SCOPE);
+        this.isDebugMode = false;
     }
 
-    public debug(message: string, ...args: any[]): void {
+    public isDebugEnabled(): boolean {
+        return this.isDebugMode;
+    }
+
+    public debug(message: string, args: object = {}): void {
         this.log('debug', message, args);
     }
 
-    public info(message: string, ...args: any[]): void {
+    public info(message: string, args: object = {}): void {
         this.log('info', message, args);
     }
 
-    public warn(message: string, ...args: any[]): void {
+    public warn(message: string, args: object = {}): void {
         this.log('warn', message, args);
     }
 
-    public error(message: string, ...args: any[]): void {
+    public error(message: string, args: object = {}): void {
         this.log('error', message, args);
     }
 
-    private log(level: string, message: string, args: any[]): void {
+    private log(level: string, messageString: string, args: object = {}): void {
+        messageString = messageString.replace(/[\n\r]/g, '');
         if (winston) {
-            winston[level](`${this.formatScope()} ${message}`, args);
+            winston[level](messageString, {scope: this.formatScope(), traceId: this.getTraceId(), level, arguments: args});
         }
+    }
+
+    private getTraceId(): string {
+        if ((global as any).frameworkSettings !== undefined) {
+            const clsNamespace: Namespace = (global as any).frameworkSettings.getData('clsNamespace');
+            if (clsNamespace) {
+                const traceID = clsNamespace.get('traceID');
+                if (traceID) {
+                    return `${traceID}`;
+                }
+            }
+        }
+        return '';
     }
 
     private formatScope(): string {
