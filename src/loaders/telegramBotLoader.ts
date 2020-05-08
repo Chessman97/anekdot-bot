@@ -2,11 +2,13 @@
 import { MicroframeworkLoader, MicroframeworkSettings } from 'microframework-w3tec';
 import Telegraf, { Stage } from 'telegraf';
 import session from 'telegraf/session';
+import { Container } from 'typedi';
 
+import { UserService } from '../api/services/UserService';
 import { Logger } from '../lib/logger';
 import { TelegrafBot } from '../lib/telegraf';
 import { addAnecdoteScene } from '../telegram/scenes/addAnecdoteScene';
-import { listChannelScene } from '../telegram/scenes/listChannelScene';
+import { addHeaderAnecdoteScene } from '../telegram/scenes/addHeaderAnecdoteScene';
 import { startScene } from '../telegram/scenes/startScene';
 
 const log = new Logger(__filename);
@@ -22,8 +24,8 @@ export const telegramBotLoader: MicroframeworkLoader = async (settings: Microfra
     });
 
     const stage = new Stage([
-        listChannelScene,
         startScene,
+        addHeaderAnecdoteScene,
         addAnecdoteScene,
     ]);
 
@@ -33,6 +35,8 @@ export const telegramBotLoader: MicroframeworkLoader = async (settings: Microfra
 
     // Открытие начального меню
     telegraf.bot.start(async (ctx: any) => {
+        const userService = Container.get<UserService>(UserService);
+        await userService.addUser(ctx);
         ctx.scene.enter('start');
     });
 

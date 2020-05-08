@@ -9,6 +9,9 @@ export class Anecdote {
     public id: number;
 
     @Column()
+    public header: string;
+
+    @Column()
     public text: string;
 
     @Column()

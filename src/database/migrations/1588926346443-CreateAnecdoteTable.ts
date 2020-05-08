@@ -8,8 +8,12 @@ export class CreateAnecdoteTable1588926346443 implements MigrationInterface {
             columns: [
                 {
                     name: 'id',
-                    type: 'integer',
+                    type: 'serial',
                     isPrimary: true,
+                    isNullable: false,
+                }, {
+                    name: 'header',
+                    type: 'text',
                     isNullable: false,
                 }, {
                     name: 'text',

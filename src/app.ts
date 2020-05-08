@@ -36,12 +36,31 @@ bootstrapMicroframework({
         eventDispatchLoader,
         typeormLoader,
         expressLoader,
+        redisLoader,
         swaggerLoader,
         homeLoader,
         publicLoader,
-        redisLoader,
         telegramBotLoader,
     ],
 })
-    .then(() => banner(log))
+    .then((mf) => {
+        // Graceful shutdown handler
+        process.on('SIGINT', async () => {
+            mf.shutdown()
+                .then(() => {
+                    log.info('Graceful shutdown');
+                    process.exit(0);
+                })
+                .catch(() => {
+                    log.warn('Application shutdown, but some of mf shutdown handlers was corrupted');
+                    process.exit(2);
+                });
+        });
+        (global as any).frameworkSettings = mf.settings;
+        if (typeof process.send === 'function') {
+            process.send('ready');
+        }
+
+        banner(log);
+    })
     .catch(error => log.error('Application is crashed: ' + error));
