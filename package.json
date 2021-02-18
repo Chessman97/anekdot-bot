@@ -23,7 +23,7 @@
   "author": "mikhailef@mail.ru",
   "contributors": [],
   "dependencies": {
-    "bcrypt": "3.0.1",
+    "bcrypt": "5.0.0",
     "bluebird": "^3.7.2",
     "chalk": "^2.4.1",
     "class-validator": "^0.9.1",
