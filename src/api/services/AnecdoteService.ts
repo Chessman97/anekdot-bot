@@ -36,9 +36,14 @@ export class AnecdoteService {
         }
     }
 
-    public async generateRandomAnecdote(): Promise<Anecdote | undefined> {
+    public async generateRandomAnecdote(anecdoteType?: number): Promise<Anecdote | undefined> {
         this.log.info('AnecdoteService:generateRandomAnecdote');
-        const type = Math.floor(Math.random() * env.rzhunemogu.types.length);
+        let type: number;
+        if (anecdoteType) {
+            type = anecdoteType;
+        } else {
+            type = Math.floor(Math.random() * env.rzhunemogu.types.length);
+        }
         const response = await rzhunemoguRequest(env.rzhunemogu.types[type]);
         const anecdote: Anecdote = new Anecdote();
         anecdote.text = response;
@@ -46,5 +51,15 @@ export class AnecdoteService {
         const savedAnecdote: Anecdote = await this.anecdoteRepository.save(anecdote);
         this.log.info('AnecdoteService:generateRandomAnecdote:generated', { anecdoteId: savedAnecdote.id, type });
         return savedAnecdote;
+    }
+
+    public async getLastAnecdote(): Promise<Anecdote | undefined> {
+        this.log.info('AnecdoteService:getRandomAnecdote');
+        const anecdotes: Anecdote[] = await this.anecdoteRepository.find();
+        if (anecdotes.length > 0) {
+            return anecdotes[anecdotes.length - 1];
+        } else {
+            return undefined;
+        }
     }
 }
