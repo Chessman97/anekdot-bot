@@ -112,7 +112,7 @@ module.exports = {
             },
             public: {
                 script: copy(
-                    './src/public/*',
+                    '"./src/public/**/*"',
                     './dist'
                 ),
                 hiddenFromHelp: true
@@ -291,7 +291,7 @@ function run(path) {
 }
 
 function runFast(path) {
-    return `ts-node --transpileOnly ${path}`;
+    return `ts-node --transpile-only ${path}`;
 }
 
 function tslint(path) {

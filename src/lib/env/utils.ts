@@ -18,6 +18,16 @@ export function getPath(path: string): string {
         : join(process.cwd(), path);
 }
 
+export function getOsPublicPath(key: string): string {
+    return getPublicPath(getOsEnv(key));
+}
+
+export function getPublicPath(path: string): string {
+    return (process.env.NODE_ENV === 'production')
+        ? join(process.cwd(), path.replace('src/', 'dist/'))
+        : join(process.cwd(), path);
+}
+
 export function getPaths(paths: string[]): string[] {
     return paths.map(p => getPath(p));
 }
