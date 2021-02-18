@@ -8,7 +8,8 @@ import { UserService } from '../api/services/UserService';
 import { Logger } from '../lib/logger';
 import { TelegrafBot } from '../lib/telegraf';
 import { addAnecdoteScene } from '../telegram/scenes/addAnecdoteScene';
-import { addHeaderAnecdoteScene } from '../telegram/scenes/addHeaderAnecdoteScene';
+import { generateAnecdoteScene } from '../telegram/scenes/generateAnecdoteScene';
+import { getAnecdoteScene } from '../telegram/scenes/getAnecdoteScene';
 import { startScene } from '../telegram/scenes/startScene';
 
 const log = new Logger(__filename);
@@ -25,8 +26,9 @@ export const telegramBotLoader: MicroframeworkLoader = async (settings: Microfra
 
     const stage = new Stage([
         startScene,
-        addHeaderAnecdoteScene,
         addAnecdoteScene,
+        getAnecdoteScene,
+        generateAnecdoteScene,
     ]);
 
     telegraf.bot.use(session());

@@ -3,7 +3,8 @@ import * as path from 'path';
 
 import * as pkg from '../package.json';
 import {
-    getOsEnv, getOsEnvOptional, getOsPath, getOsPaths, normalizePort, toBool, toNumber
+    getOsEnv, getOsEnvArray, getOsEnvOptional, getOsPath, getOsPaths, normalizePort, toBool,
+    toNumber
 } from './lib/env';
 
 /**
@@ -68,5 +69,8 @@ export const env = {
     },
     telegram: {
         botToken: getOsEnv('TELEGRAM_BOT_TOKEN'),
+    },
+    rzhunemogu: {
+        types: getOsEnvArray('RZHUNEMOGU_TYPES'),
     },
 };

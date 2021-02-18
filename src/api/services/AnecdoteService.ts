@@ -1,6 +1,8 @@
 import { OrmRepository } from 'typeorm-typedi-extensions';
 
 import { Logger, LoggerInterface } from '../../decorators/Logger';
+import { env } from '../../env';
+import { rzhunemoguRequest } from '../../lib/rzhunemogu';
 import { Anecdote } from '../models/Anecdote';
 import { AnecdoteRepository } from '../repositories/AnecdoteRepository';
 
@@ -12,7 +14,7 @@ export class AnecdoteService {
 
     public async getAnecdotes(): Promise<Anecdote[]> {
         this.log.info('AnecdoteService:getAnecdotes');
-        return await this.anecdoteRepository.find();
+        return this.anecdoteRepository.find();
     }
 
     public async addAnecdote(userChatId: number, header: string, text: string): Promise<Anecdote> {
@@ -21,6 +23,28 @@ export class AnecdoteService {
         newEntityAnecdote.header = header;
         newEntityAnecdote.text = text;
         newEntityAnecdote.userId = userChatId;
-        return await this.anecdoteRepository.save(newEntityAnecdote);
+        return this.anecdoteRepository.save(newEntityAnecdote);
+    }
+
+    public async getRandomAnecdote(): Promise<Anecdote | undefined> {
+        this.log.info('AnecdoteService:getRandomAnecdote');
+        const anecdotes: Anecdote[] = await this.anecdoteRepository.find();
+        if (anecdotes.length > 0) {
+            return anecdotes[Math.floor(Math.random() * anecdotes.length)];
+        } else {
+            return undefined;
+        }
+    }
+
+    public async generateRandomAnecdote(): Promise<Anecdote | undefined> {
+        this.log.info('AnecdoteService:generateRandomAnecdote');
+        const type = Math.floor(Math.random() * env.rzhunemogu.types.length);
+        const response = await rzhunemoguRequest(env.rzhunemogu.types[type]);
+        const anecdote: Anecdote = new Anecdote();
+        anecdote.text = response;
+        anecdote.header = response.split(' ')[0];
+        const savedAnecdote: Anecdote = await this.anecdoteRepository.save(anecdote);
+        this.log.info('AnecdoteService:generateRandomAnecdote:generated', { anecdoteId: savedAnecdote.id, type });
+        return savedAnecdote;
     }
 }

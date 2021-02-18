@@ -14,7 +14,7 @@ export class CreateAnecdoteTable1588926346443 implements MigrationInterface {
                 }, {
                     name: 'header',
                     type: 'text',
-                    isNullable: false,
+                    isNullable: true,
                 }, {
                     name: 'text',
                     type: 'text',
@@ -22,7 +22,7 @@ export class CreateAnecdoteTable1588926346443 implements MigrationInterface {
                 }, {
                     name: 'userId',
                     type: 'integer',
-                    isNullable: false,
+                    isNullable: true,
                 },
             ],
         });
